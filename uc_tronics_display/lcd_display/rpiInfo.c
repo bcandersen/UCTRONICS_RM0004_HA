@@ -31,7 +31,7 @@ char* get_ip_address(void)
       static char ipv4Buff[16] = {0};
 
       FILE *fd = NULL;
-      fd=popen("ha network info --raw-json | jq -r '.data | .interfaces[] | select(.interface==\"end0\") .ipv4.address[0] | split(\"/\")[0]'","r"); 
+      fd=popen("/usr/bin/ha network info --raw-json | jq -r '.data | .interfaces[] | select(.interface==\"end0\") .ipv4.address[0] | split(\"/\")[0]'","r"); 
       fgets(ipv4Buff,sizeof(ipv4Buff),fd);
       fclose(fd);
 
