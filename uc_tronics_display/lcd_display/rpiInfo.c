@@ -28,22 +28,14 @@ char* get_ip_address(void)
     int symbol=0;
     if (IPADDRESS_TYPE == ETH0_ADDRESS)
     {
-      fd = socket(AF_INET, SOCK_DGRAM, 0);
-      /* I want to get an IPv4 IP address */
-      ifr.ifr_addr.sa_family = AF_INET;
-      /* I want IP address attached to "eth0" */
-      strncpy(ifr.ifr_name, "eth0", IFNAMSIZ-1);
-      symbol=ioctl(fd, SIOCGIFADDR, &ifr);
-      close(fd);
-      if(symbol==0)
-      {
-        return inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr);
-      }
-      else
-      {
-        char* buffer="xxx.xxx.xxx.xxx";
-        return buffer;
-      }
+      uint8_t ipv4Buff[16] = {0};
+
+      FILE *fd = NULL;
+      fd=popen("ha network info --raw-json | jq -r '.data | .interfaces[] | select(.interface==\"end0\") .ipv4.address[0] | split(\"/\")[0]'","r"); 
+      fgets(ipv4Buff,sizeof(ipv4Buff),fd);
+      fclose(fd);
+
+      return *ipv4Buff;
     }
     else if (IPADDRESS_TYPE == WLAN0_ADDRESS)
     {
