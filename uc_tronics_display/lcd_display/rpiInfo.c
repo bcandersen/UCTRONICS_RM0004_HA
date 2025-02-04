@@ -28,14 +28,14 @@ char* get_ip_address(void)
     int symbol=0;
     if (IPADDRESS_TYPE == ETH0_ADDRESS)
     {
-      char ipv4Buff[16] = {0};
+      static char ipv4Buff[16] = {0};
 
       FILE *fd = NULL;
       fd=popen("ha network info --raw-json | jq -r '.data | .interfaces[] | select(.interface==\"end0\") .ipv4.address[0] | split(\"/\")[0]'","r"); 
       fgets(ipv4Buff,sizeof(ipv4Buff),fd);
       fclose(fd);
 
-      return *ipv4Buff;
+      return ipv4Buff;
     }
     else if (IPADDRESS_TYPE == WLAN0_ADDRESS)
     {
