@@ -28,7 +28,7 @@ char* get_ip_address(void)
     int symbol=0;
     if (IPADDRESS_TYPE == ETH0_ADDRESS)
     {
-      uint8_t ipv4Buff[16] = {0};
+      char ipv4Buff[16] = {0};
 
       FILE *fd = NULL;
       fd=popen("ha network info --raw-json | jq -r '.data | .interfaces[] | select(.interface==\"end0\") .ipv4.address[0] | split(\"/\")[0]'","r"); 
